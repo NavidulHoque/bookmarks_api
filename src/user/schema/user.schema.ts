@@ -1,6 +1,7 @@
 /* eslint-disable prettier/prettier */
 
 import * as mongoose from "mongoose";
+import * as argon from "argon2";
 
 export const UserSchema = new mongoose.Schema({
 
@@ -23,6 +24,13 @@ export const UserSchema = new mongoose.Schema({
   } 
 
 }, { timestamps: true })
+
+UserSchema.pre('save', async function(next) {
+
+  const hashedPassword = await argon.hash(this.password)
+  this.password = hashedPassword
+  next()
+})
 
 
 // UserSchema.methods.comparePassword = async function (plainPassword, hashedPassword) {
