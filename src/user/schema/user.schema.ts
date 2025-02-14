@@ -32,10 +32,3 @@ UserSchema.pre('save', async function(next) {
   next()
 })
 
-
-// UserSchema.methods.comparePassword = async function (plainPassword, hashedPassword) {
-
-//     const isMatched = await argon.verify(plainPassword, hashedPassword)
-
-//     return isMatched
-// }
