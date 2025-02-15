@@ -1,5 +1,3 @@
-/* eslint-disable prettier/prettier */
-
 import { BadRequestException, Inject, Injectable } from '@nestjs/common';
 import { AuthDto } from './dto';
 import { Model } from 'mongoose';
@@ -28,14 +26,14 @@ export class AuthService {
       const user = await this.fetchUser(email)
 
       if (user) {
-        return this.throwError("User already exists")
+        this.throwError("User already exists")
       }
 
       const newUser = new this.userModel({email, password})
 
       await newUser.save()
 
-      return { message: 'User created successfully' };
+      return { message: 'User created successfully' }
     }
 
     catch (error) {
@@ -48,7 +46,7 @@ export class AuthService {
           message.push(error.errors[field].message);
         });
 
-        return this.throwError(message)
+        this.throwError(message)
       }
 
       throw error; //throws server error
@@ -63,7 +61,7 @@ export class AuthService {
       const user = await this.fetchUser(email)
 
       if (!user) {
-        return this.throwError("User not found");
+        this.throwError("User not found");
       }
 
       const { _id, password: hashedPassword } = user as any;
@@ -71,7 +69,7 @@ export class AuthService {
       const isMatched = await this.comparePassword(plainPassword, hashedPassword)
 
       if (!isMatched) {
-        return this.throwError("Password invalid")
+        this.throwError("Password invalid")
       }
 
       const token = await this.generateToken(user)
@@ -80,7 +78,7 @@ export class AuthService {
         message: 'Logged in successfully',
         user: { id: _id, email },
         token
-      };
+      }
     }
 
     catch (error) {
@@ -88,20 +86,20 @@ export class AuthService {
     }
   }
 
-  async fetchUser(email: string){
+  private async fetchUser(email: string): Promise<any>{
 
     const user = await this.userModel.findOne({email})
 
     return user
   }
 
-  async comparePassword(plainPassword: string, hashedPassword: string){
+  private async comparePassword(plainPassword: string, hashedPassword: string): Promise<boolean>{
     const isMatched = await argon.verify(hashedPassword, plainPassword)
 
     return isMatched
   }
 
-  async generateToken(user: any) {
+  private async generateToken(user: any): Promise<string> {
 
     const { email, _id } = user
 
@@ -110,13 +108,13 @@ export class AuthService {
 
     const token = await this.jwtService.signAsync(payload, {
       secret,
-      expiresIn: '60s'
+      expiresIn: '1d'
     })
 
     return token
   }
 
-  throwError(message: string | string[]){
+  private throwError(message: string | string[]): void{
     throw new BadRequestException(message);
   }
 }
