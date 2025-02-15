@@ -1,13 +1,14 @@
 import { Controller, UseGuards, Get, Request } from '@nestjs/common';
-import { AuthGuard } from 'src/auth/auth.guard';
+import { AuthGuard } from 'src/auth/guard'; 
+import { User } from './decorator';
 
+@UseGuards(AuthGuard)
 @Controller('users')
 export class UserController {
 
-    @UseGuards(AuthGuard)
     @Get('/')
-    getUser(@Request() req: any){
-        const {sub, email} = req.user
+    getUser(@User() user: any){
+        const {sub, email} = user
 
         return {id: sub, email}
     }

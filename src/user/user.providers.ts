@@ -1,8 +1,8 @@
 /* eslint-disable prettier/prettier */
 
 import { Connection } from 'mongoose';
-import { UserSchema } from './schema/user.schema';
-import { USER_MODEL } from './constants';
+import { UserSchema } from './schema'; 
+import { USER_MODEL } from './schema';
 
 export const usersProviders = [
   {

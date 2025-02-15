@@ -1,9 +1,9 @@
 import { BadRequestException, Inject, Injectable } from '@nestjs/common';
 import { AuthDto } from './dto';
 import { Model } from 'mongoose';
-import { User } from 'src/user/user.interface';
+import { User } from 'src/user/interface'; 
 import * as argon from "argon2";
-import { USER_MODEL } from 'src/user/constants';
+import { USER_MODEL } from 'src/user/schema'; 
 import { JwtService } from '@nestjs/jwt';
 import { ConfigService } from '@nestjs/config';
 
